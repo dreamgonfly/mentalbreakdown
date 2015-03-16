@@ -20,6 +20,7 @@ def list():
         title = 'Todo List',
         tasks = tasks)
 
+# @app.route('/')
 @app.route('/pomodoro')
 def pomodoro():
     pick = Task.pick_one()
@@ -33,6 +34,9 @@ def pomodoro():
 @app.route('/compelete/<int:task_id>')
 def complete(task_id):
     task = Task.query.get(task_id)
-    task.compeleted = True
+    if task is None:
+        flash("Task not found")
+        return redirect(url_for('pomorodo'))
+    task.completed = True
     db.session.commit()
     return redirect(url_for('pomodoro'))
