@@ -2,7 +2,6 @@ from flask import render_template, flash, redirect, session, url_for, request, g
 from app import app, db
 from .forms import TaskForm
 from .models import Task
-from datetime import datetime
 import json
 
 @app.route('/', methods=['GET', 'POST'])
@@ -10,7 +9,7 @@ import json
 def list():
     form = TaskForm()
     if form.validate_on_submit():
-        task = Task(raw = form.task.data, timestamp=datetime.utcnow(), completed = False)
+        task = Task(raw = form.task.data)
         db.session.add(task)
         db.session.commit()
         flash("You added a new task")
@@ -21,11 +20,9 @@ def list():
         title = 'Todo List',
         tasks = tasks)
 
-from random import choice
-
 @app.route('/pomodoro')
 def pomodoro():
-    pick = choice(Task.pick_one().all())
+    pick = Task.pick_one()
     if pick is None:
         flash("There is no active task anymore")
         return redirect(url_for('list'))
