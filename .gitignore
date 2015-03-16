@@ -2,9 +2,9 @@
 *.pyc
 
 app.db
-/db_repository/
-/flask/
-/__pycache__/
+db_repository
+flask
+__pycache__
 
 *.sublime-project
 *.sublime-workspace
