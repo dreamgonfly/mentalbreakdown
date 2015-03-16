@@ -40,6 +40,17 @@
       padding: 14px 24px;
     }
     </style>
+    <script type="text/javascript">
+    function add(task){
+        $.post('/add', {
+            task : $(task).val()
+        }).done(function(response){
+            $(task).val('');
+        }).fail(function(){
+            $(task).val('fail to add');
+        });
+    }
+    </script>
   </head>
   <body>
     <div class="container-narrow">

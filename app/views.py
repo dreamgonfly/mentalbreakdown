@@ -1,4 +1,4 @@
-from flask import render_template, flash, redirect, session, url_for, request, g
+from flask import render_template, flash, redirect, session, url_for, request, g, jsonify
 from app import app, db
 from .forms import TaskForm
 from .models import Task
@@ -39,3 +39,20 @@ def complete(task_id):
     task.completed = True
     db.session.commit()
     return redirect(request.args.get('next') or url_for('pomodoro'))
+
+@app.route('/add', methods=['POST'])
+def add():
+    task = Task(raw = request.form['task'])
+    db.session.add(task)
+    db.session.commit()
+    # return jsonify({'task' : task})
+    return jsonify({})
+
+@app.errorhandler(404)
+def not_found_error(error):
+    return render_template('404.html'), 404
+
+@app.errorhandler(500)
+def internal_error(error):
+    db.session.rollback()
+    return render_template('500.html'), 500
