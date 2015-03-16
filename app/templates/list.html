@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <form action="" method="post" name="task">
+      {{ form.hidden_tag() }}
+      <table>
+          <tr>
+              <td>Task:</td>
+              <td>{{ form.task(size=30, maxlength=140) }}</td>
+              <td>
+              {% for error in form.task.errors %}
+              <span style="color: red;">[{{ error }}]</span><br>
+              {% endfor %}
+              </td>
+          </tr>
+          <tr>
+              <td></td>
+              <td><input type="submit" value="New Task"></td>
+              <td></td>
+          </tr>
+      </table>
+  </form>
+{% for task in tasks %}
+    {% include 'task.html' %}
+{% endfor %}
+{% endblock %}

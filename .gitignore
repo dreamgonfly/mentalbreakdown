@@ -1,0 +1,10 @@
+*.DS_Store
+*.pyc
+
+app.db
+/db_repository/
+/flask/
+/__pycache__/
+
+*.sublime-project
+*.sublime-workspace

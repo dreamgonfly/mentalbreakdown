@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <a href="{{ url_for('complete', task_id=pick.id) }}">complete</a>
+  <div id="task{{ pick.id }}">{{ pick.raw }}</div>
+{% endblock %}
