@@ -1,6 +1,9 @@
-<table>
-    <tr valign="top">
-    	<td><input type="button", value="completed", onclick=""></td>
-        <td><br>{{ task.raw }}</td>
+<table class="table table-hover">
+    <tr>
+        <td><a href="/complete/{{ task.id }}" />completed</td></td>
+        <td>
+            <p><strong>{{ task.todo }}</strong></p>
+            <p>estimated time : {{ task.estimated_time }}</p>
+        </td>
     </tr>
 </table>

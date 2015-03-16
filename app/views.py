@@ -12,7 +12,6 @@ def list():
         task = Task(raw = form.task.data)
         db.session.add(task)
         db.session.commit()
-        flash("You added a new task")
         return redirect(url_for('list'))
     tasks = Task.active_tasks().all()
     return render_template('list.html',
@@ -25,13 +24,13 @@ def list():
 def pomodoro():
     pick = Task.pick_one()
     if pick is None:
-        flash("There is no active task anymore")
+        flash("Cannot pick one task")
         return redirect(url_for('list'))
     return render_template('pomodoro.html',
         title = 'Pomodoro',
         pick = pick)
 
-@app.route('/compelete/<int:task_id>')
+@app.route('/complete/<int:task_id>')
 def complete(task_id):
     task = Task.query.get(task_id)
     if task is None:
@@ -39,4 +38,4 @@ def complete(task_id):
         return redirect(url_for('pomorodo'))
     task.completed = True
     db.session.commit()
-    return redirect(url_for('pomodoro'))
+    return redirect(request.args.get('next') or url_for('pomodoro'))

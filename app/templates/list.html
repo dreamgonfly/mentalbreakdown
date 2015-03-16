@@ -1,26 +1,29 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <form action="" method="post" name="task">
-      {{ form.hidden_tag() }}
-      <table>
-          <tr>
-              <td>Task:</td>
-              <td>{{ form.task(size=30, maxlength=140) }}</td>
-              <td>
-              {% for error in form.task.errors %}
-              <span style="color: red;">[{{ error }}]</span><br>
-              {% endfor %}
-              </td>
-          </tr>
-          <tr>
-              <td></td>
-              <td><input type="submit" value="New Task"></td>
-              <td></td>
-          </tr>
-      </table>
-  </form>
-{% for task in tasks %}
-    {% include 'task.html' %}
-{% endfor %}
+    {% include 'flash.html' %}
+    <div class="well">
+        <form class="form-horizontal" action="" method="post" name="task">
+            {{ form.hidden_tag() }}
+            <div class="control-group{% if form.task.errors %} error{% endif %}">
+                <label class="control-label" for="task">New Task:</label>
+                <div class="controls">
+                    {{ form.task(size=30, maxlength=140) }}
+                    {% for error in form.task.errors %}
+                        <span class="help-inline">[{{ error }}]</span><br>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="control-group">
+                <div class="controls">
+                    <input class="btn btn-primary" type="submit" value="Add">
+                </div>
+            </div>
+        </form>
+    </div>
+    {% if tasks %}
+        {% for task in tasks %}
+            {% include 'task.html' %}
+        {% endfor %}
+    {% endif %}
 {% endblock %}

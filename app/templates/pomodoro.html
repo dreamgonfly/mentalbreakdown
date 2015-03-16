@@ -1,6 +1,13 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <a href="{{ url_for('complete', task_id=pick.id) }}">complete</a>
-  <div id="task{{ pick.id }}">{{ pick.raw }}</div>
+  <div class="jumbotron"> 
+{% if pick %}
+    <h1 id="task{{ pick.id }}">{{ pick.todo }}</h1>
+    <p class="lead">Estimated time : {{ pick.estimated_time }}</p>
+    <a class="btn btn-large btn-success" href="{{ url_for('complete', task_id=pick.id) }}">complete</a>
+{% else %}
+    <p class="lead">There is no task anymore</p>
+{% endif %}
+  </div>
 {% endblock %}

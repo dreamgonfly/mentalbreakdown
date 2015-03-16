@@ -31,5 +31,6 @@ class Task(db.Model):
     @staticmethod
     def pick_one():
     	candidates = Task.active_tasks().order_by(Task.estimated_time)
-    	first_group = candidates.filter_by(estimated_time = candidates.first().estimated_time)
-    	return choice(first_group.all())
+    	if candidates.first():
+	    	first_group = candidates.filter_by(estimated_time = candidates.first().estimated_time)
+	    	return choice(first_group.all())
