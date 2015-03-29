@@ -1,7 +1,7 @@
 from app import db
 from datetime import datetime
-import re
-from random import choice
+from .parse import parse_todo
+from .prioritize import pick_one
 
 class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -11,15 +11,32 @@ class Task(db.Model):
     estimated_time = db.Column(db.Integer, default = 1)
     due = db.Column(db.DateTime)
     completed = db.Column(db.Boolean, default = False)
+    completed_time = db.Column(db.DateTime)
+    last_notnow = db.Column(db.DateTime)
+    number_of_notnow = db.Column(db.Integer, default = 0)
 
     def __init__(self, *args, **kwargs):
-    	db.Model.__init__(self, *args, **kwargs)
-    	pattern = re.compile(r'(?P<todo>[\w\s,\.]+)(?:\((?P<estimated_time>\d+)\))?')
-    	r = pattern.match(kwargs['raw']).groupdict()
-    	self.todo = r['todo'].strip()
-    	if r['estimated_time']:
-	    	self.estimated_time = int(r['estimated_time'])
-    	self.timestamp = datetime.now()
+        db.Model.__init__(self, *args, **kwargs)
+        r = parse_todo(kwargs['raw'])
+        self.todo = r['todo']
+        if 'estimated_time' in r:
+            self.estimated_time = r['estimated_time']
+        else:
+            self.estimated_time = 1
+        if 'due' in r:
+            self.due = r['due']
+        self.last_notnow = datetime.min
+        self.timestamp = datetime.now()
+
+    def edit(self, raw):
+        r = parse_todo(raw)
+        self.todo = r['todo']
+        if 'estimated_time' in r:
+            self.estimated_time = r['estimated_time']
+        else:
+            self.estimated_time = 1
+        if 'due' in r:
+            self.due = r['due']
 
     def __repr__(self):
         return '<Task {}>'.format(self.raw)
@@ -30,7 +47,4 @@ class Task(db.Model):
 
     @staticmethod
     def pick_one():
-    	candidates = Task.active_tasks().order_by(Task.estimated_time)
-    	if candidates.first():
-	    	first_group = candidates.filter_by(estimated_time = candidates.first().estimated_time)
-	    	return choice(first_group.all())
+    	return pick_one(Task.active_tasks().all())

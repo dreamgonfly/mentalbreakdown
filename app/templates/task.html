@@ -1,9 +1,10 @@
 <table class="table table-hover">
     <tr>
-        <td><a href="/complete/{{ task.id }}" />completed</td></td>
-        <td>
+        <td><a href="{{ url_for('complete', task_id=task.id) }}" />complete</td></td>
+        <td class="task" id="{{ task.id }}">
             <p><strong>{{ task.todo }}</strong></p>
             <p>estimated time : {{ task.estimated_time }}</p>
+	        <span class="hidden">{{ task.raw }}</span>
         </td>
     </tr>
 </table>

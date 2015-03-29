@@ -1,3 +1,8 @@
+from datetime import datetime, timedelta
+
+LAMBDA = 0.7
+REFRESH_TIME = timedelta(hours = 2)
+
 WTF_CSRF_ENABLED = True
 SECRET_KEY = 'secretofmentalbreakdown'
 

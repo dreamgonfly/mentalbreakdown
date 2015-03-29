@@ -4,14 +4,17 @@
   <div class="jumbotron"> 
 {% if pick %}
     <h1 id="task{{ pick.id }}">{{ pick.todo }}</h1>
+    <!-- <p><a href="javascript:edit">edit</a></p> -->
     <p class="lead">Estimated time : {{ pick.estimated_time }}</p>
+    <p class="lead">priority : {{ pick.priority }}</p>    
     <a class="btn btn-large btn-success" href="{{ url_for('complete', task_id=pick.id) }}">complete</a>
+    <a class="btn btn-large" href="{{ url_for('notnow', task_id=pick.id) }}">Not Now</a>
 {% else %}
     <p class="lead">There is no task anymore</p>
 {% endif %}
     <hr>
     <input id="task" type="text">
-    <a class="btn btn-primary" href="javascript:add('#task');">add</a>
+    <a class="btn btn-primary" href="javascript:add();">add</a>
 
   </div>
 {% endblock %}

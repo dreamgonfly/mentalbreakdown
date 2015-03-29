@@ -39,17 +39,47 @@
       font-size: 21px;
       padding: 14px 24px;
     }
+    .hidden {
+      visibility: hidden;
+    }
     </style>
     <script type="text/javascript">
-    function add(task){
+    function add(){
         $.post('/add', {
+            task : $('#task').val()
+        }).done(function(response){
+            $('#task').val('');
+        }).fail(function(){
+            $('#task').val('fail to add');
+        });
+    }
+    function edit(task, task_id){
+        $.post('/edit/'+task_id, {
             task : $(task).val()
         }).done(function(response){
-            $(task).val('');
+            $t = $('#'+task_id)
+            $t.empty();
+            $t.append('<p><strong>'+response['todo'] + '</strong></p>');
+            $t.append('<p>estimated time : ' + response['estimated_time'] + '</p>');
+            $t.append('<span class="hidden">' + response['raw'] + '</span>')
+
         }).fail(function(){
             $(task).val('fail to add');
         });
     }
+    $(document).ready(function() {
+      $('.task').click(function() {
+        var t = $(this).find(".hidden").text();
+        var i = $(this).attr("id");
+        $(this).empty();
+        $(this).append('<input id="input' + i + '" type="text">');
+        $(this).append("<br /><a href=\"javascript:edit('#input" + i + "', " + i +");\">edit</a>");
+        $(this).append('<span class="hidden">' + t + '</span>')
+        $('#input' + i).val(t);
+        $(this).off()
+      })
+
+    })
     </script>
   </head>
   <body>
