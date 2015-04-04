@@ -6,7 +6,7 @@
     <div id="task{{ pick.id }}">
         <h1 onclick="pomodoro_edit_ready({{ pick.id }})">{{ pick.todo }}</h1>
         <!-- <p><a href="javascript:edit">edit</a></p> -->
-        <p class="lead">Required time : {{ pick.required_time }}</p>
+        <p class="lead">{{ pick.required_time }} pomodoro</p>
         <p class="lead">priority : {{ pick.priority }}</p>
     </div>
     <a class="btn btn-large btn-success" href="{{ url_for('complete', task_id=pick.id) }}">complete</a>

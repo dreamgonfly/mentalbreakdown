@@ -3,9 +3,8 @@
         <td style="width:200px;"><a href="{{ url_for('complete', task_id=task.id) }}">complete</a></td>
         <td class="task" id="{{ task.id }}">
             <p onclick="edit_ready({{ task.id }})"><strong>{{ task.todo }}</strong></p>
-            <p>{{ task.required_time }}</p>
-	        <span class="hidden">{{ task.raw }}</span>
+            <p>{{ task.required_time }} pomodoro</p>
         </td>
-        <td><a href="{{ url_for('drop', task_id=task.id) }}">drop</a></td>
+        <td><span class="pull-right"><a href="{{ url_for('drop', task_id=task.id) }}">drop</a></span></td>
     </tr>
 </table>

@@ -81,7 +81,7 @@
             $task.empty();
             $p = $('<p></p>');
             $p.append('<strong>' + response['todo'] + '</strong>');
-            $required_time = $('<p>' + response['required_time'] + '</p>');
+            $required_time = $('<p>' + response['required_time'] + ' pomodoro' + '</p>');
             $task.append($p);
             $task.append($required_time);
             $p.attr('onclick', 'edit_ready(' + task_id + ')');

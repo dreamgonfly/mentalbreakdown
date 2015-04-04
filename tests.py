@@ -77,6 +77,27 @@ class TestCase(unittest.TestCase):
         assert p['due'].day == datetime.today().day + 2
         assert p['due'].hour == 23
         assert p['due'].minute == 59
+        p = parse_todo('Buy milk 2d~ (2)')
+        assert p['todo'] == 'Buy milk'
+        assert p['scheduled'].year == datetime.today().year
+        assert p['scheduled'].month == datetime.today().month
+        assert p['scheduled'].day == datetime.today().day + 2
+        assert p['scheduled'].hour == 0
+        assert p['scheduled'].minute == 0
+        p = parse_todo('Buy milk 2d~2d (2)')
+        assert p['todo'] == 'Buy milk'
+        assert p['due'].day == datetime.today().day + 2
+        assert p['scheduled'].day == datetime.today().day + 2
+        assert p['scheduled'].hour == 0
+        assert p['scheduled'].minute == 0
+        p = parse_todo('Buy milk 2015-3-25 14:35:24~2d (2)')
+        assert p['todo'] == 'Buy milk'
+        assert p['due'].day == datetime.today().day + 2
+        assert p['scheduled'] == datetime(2015, 3, 25, 14, 35, 24)
+        p = parse_todo('Buy milk (2) 2015-3-25 14:35:24~2d ')
+        assert p['todo'] == 'Buy milk'
+        assert p['due'].day == datetime.today().day + 2
+        assert p['scheduled'] == datetime(2015, 3, 25, 14, 35, 24)
 
 if __name__ == '__main__':
     unittest.main()
