@@ -5,6 +5,7 @@
 app.db
 test.db
 flask
+backup
 
 *.sublime-project
 *.sublime-workspace
