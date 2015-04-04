@@ -38,10 +38,9 @@ def complete(task_id):
     if task is None:
         flash("Task not found")
         return redirect(url_for('pomorodo'))
-    task.completed = True
     task.completed_time = datetime.now()
     db.session.commit()
-    return redirect(request.args.get('next') or url_for('list'))
+    return redirect(request.args.get('prev') or url_for('pomodoro'))
 
 @app.route('/add', methods=['POST'])
 def add():
@@ -51,13 +50,39 @@ def add():
     # return jsonify({'task' : task})
     return jsonify({})
 
+@app.route('/edit_ready/<int:task_id>', methods = ['POST'])
+def edit_ready(task_id):
+    task = Task.query.get(task_id)
+    if not task:
+        flask("Cannot find the task")
+    re = {'raw' : task.raw }
+    return jsonify(re)
+
 @app.route('/edit/<int:task_id>', methods = ['POST'])
 def edit(task_id):
     task = Task.query.get(task_id)
     task.edit(request.form['task'])
     db.session.commit()
     display = {'todo' : task.todo,
-         'estimated_time' : task.estimated_time,
+         'required_time' : task.required_time,
+         'raw' : task.raw }
+    return jsonify(display)
+
+@app.route('/pomodoro_edit_ready/<int:task_id>', methods = ['POST'])
+def pomodoro_edit_ready(task_id):
+    task = Task.query.get(task_id)
+    if not task:
+        flask("Cannot find the task")
+    re = {'raw' : task.raw }
+    return jsonify(re)
+    
+@app.route('/pomodoro_edit/<int:task_id>', methods = ['POST'])
+def pomodoro_edit(task_id):
+    task = Task.query.get(task_id)
+    task.edit(request.form['task'])
+    db.session.commit()
+    display = {'todo' : task.todo,
+         'required_time' : task.required_time,
          'raw' : task.raw }
     return jsonify(display)
 
@@ -68,6 +93,19 @@ def notnow(task_id):
         task.number_of_notnow = 0
     task.number_of_notnow +=1
     task.last_notnow = datetime.now()
+    db.session.commit()
+    return redirect(url_for('pomodoro'))
+
+@app.route('/drop/<int:task_id>')
+def drop(task_id):
+    task = Task.query.get(task_id)
+    if task is None:
+        flash("Task not found")
+        return redirect(url_for('pomorodo'))
+    if task.dropped_time:
+        flash("Task already dropped")
+        return redirect(url_for('pomorodo'))
+    task.dropped_time = datetime.now()
     db.session.commit()
     return redirect(url_for('pomodoro'))
 

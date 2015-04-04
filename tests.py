@@ -30,19 +30,19 @@ class TestCase(unittest.TestCase):
         db.session.add(t2)
         db.session.commit()
         assert t2.todo == 'Buy milk'
-        assert t2.estimated_time == 2
+        assert t2.required_time == 2
         t1 = parse_todo('Buy milk')
         assert t1['todo'] == 'Buy milk'
         t2 = parse_todo('Buy milk (2)')
         assert t2['todo'] == 'Buy milk'
-        assert t2['estimated_time'] == 2
+        assert t2['required_time'] == 2
         p = parse_todo('Buy milk (2) ~2015-3-25 14:35:24')
         assert p['todo'] == 'Buy milk'
-        assert p['estimated_time'] == 2
+        assert p['required_time'] == 2
         assert p['due'] == datetime(2015, 3, 25, 14, 35, 24)
         p = parse_todo('Buy milk (2) ~4:35')
         assert p['todo'] == 'Buy milk'
-        assert p['estimated_time'] == 2
+        assert p['required_time'] == 2
         assert p['due'].year == datetime.today().year
         assert p['due'].month == datetime.today().month
         assert p['due'].day == datetime.today().day
@@ -50,7 +50,7 @@ class TestCase(unittest.TestCase):
         assert p['due'].minute == 35
         p = parse_todo('Buy milk ~3-25 (2)')
         assert p['todo'] == 'Buy milk'
-        assert p['estimated_time'] == 2
+        assert p['required_time'] == 2
         assert p['due'].year == datetime.today().year
         assert p['due'].month == 3
         assert p['due'].day == 25
@@ -58,7 +58,7 @@ class TestCase(unittest.TestCase):
         assert p['due'].minute == 59
         p = parse_todo('Buy milk (2) ~3-25 14:35')
         assert p['todo'] == 'Buy milk'
-        assert p['estimated_time'] == 2
+        assert p['required_time'] == 2
         assert p['due'].year == datetime.today().year
         assert p['due'].month == 3
         assert p['due'].day == 25

@@ -6,9 +6,9 @@ def parse_todo(raw):
 	parsed = {}
 	matched = re.match(r'(.*?)( ~.*| \(\d+\))*$', raw)
 	parsed['todo'] = matched.groups()[0]
-	estimated_time_raw = re.search(r' \((\d+)\)', raw)
-	if estimated_time_raw:
-		parsed['estimated_time'] = int(estimated_time_raw.groups()[0])
+	required_time_raw = re.search(r' \((\d+)\)', raw)
+	if required_time_raw:
+		parsed['required_time'] = int(required_time_raw.groups()[0])
 	due_raw = re.search(r' ~((\d+-)?\d+-\d+ \d+:\d+(:\d+)?|(\d+-)?\d+-\d+|\d+:\d+(:\d+)?|\d+h|\d+d|\d+m)', raw)
 	if due_raw:
 		due_raw = due_raw.groups()[0]

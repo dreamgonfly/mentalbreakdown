@@ -1,10 +1,11 @@
 <table class="table table-hover">
     <tr>
-        <td><a href="{{ url_for('complete', task_id=task.id) }}" />complete</td></td>
+        <td style="width:200px;"><a href="{{ url_for('complete', task_id=task.id) }}">complete</a></td>
         <td class="task" id="{{ task.id }}">
-            <p><strong>{{ task.todo }}</strong></p>
-            <p>estimated time : {{ task.estimated_time }}</p>
+            <p onclick="edit_ready({{ task.id }})"><strong>{{ task.todo }}</strong></p>
+            <p>{{ task.required_time }}</p>
 	        <span class="hidden">{{ task.raw }}</span>
         </td>
+        <td><a href="{{ url_for('drop', task_id=task.id) }}">drop</a></td>
     </tr>
 </table>

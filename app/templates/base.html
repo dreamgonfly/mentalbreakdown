@@ -53,33 +53,73 @@
             $('#task').val('fail to add');
         });
     }
-    function edit(task, task_id){
-        $.post('/edit/'+task_id, {
-            task : $(task).val()
-        }).done(function(response){
-            $t = $('#'+task_id)
-            $t.empty();
-            $t.append('<p><strong>'+response['todo'] + '</strong></p>');
-            $t.append('<p>estimated time : ' + response['estimated_time'] + '</p>');
-            $t.append('<span class="hidden">' + response['raw'] + '</span>')
+    function edit_ready(task_id){
+      $.post('/edit_ready/'+task_id, {}
+        ).done(function(response){
 
+          $task = $('#'+task_id);
+          $task.empty();
+          $input = $("<input />");
+          $input.attr('type', 'text');
+          $input.val(response['raw']);
+          $a = $("<a>edit</a>");
+          $a.attr('href', 'javascript:edit(' + task_id + ')');
+          $task.append($input);
+          $task.append('<br />')
+          $task.append($a);
+          
         }).fail(function(){
-            $(task).val('fail to add');
+          alert("fail!")
         });
     }
-    $(document).ready(function() {
-      $('.task').click(function() {
-        var t = $(this).find(".hidden").text();
-        var i = $(this).attr("id");
-        $(this).empty();
-        $(this).append('<input id="input' + i + '" type="text">');
-        $(this).append("<br /><a href=\"javascript:edit('#input" + i + "', " + i +");\">edit</a>");
-        $(this).append('<span class="hidden">' + t + '</span>')
-        $('#input' + i).val(t);
-        $(this).off()
-      })
-
-    })
+    function edit(task_id){
+        $task = $('#'+task_id);
+        $input = $('#'+task_id+'>input');
+        $.post('/edit/'+task_id, {
+            task : $input.val()
+        }).done(function(response){
+            $task.empty();
+            $p = $('<p></p>');
+            $p.append('<strong>' + response['todo'] + '</strong>');
+            $required_time = $('<p>' + response['required_time'] + '</p>');
+            $task.append($p);
+            $task.append($required_time);
+            $p.attr('onclick', 'edit_ready(' + task_id + ')');
+        }).fail(function(){
+            $input.val('fail to add');
+        });
+    }
+    function pomodoro_edit_ready(task_id){
+      $.post('/pomodoro_edit_ready/'+task_id, {}
+        ).done(function(response){
+          $task = $('#task'+task_id);
+          $task.empty();
+          $input = $("<input />");
+          $input.attr('type', 'text');
+          $input.val(response['raw']);
+          $a = $("<a>edit</a>");
+          $a.attr('href', 'javascript:pomodoro_edit(' + task_id + ')');
+          $task.append($input);
+          $task.append('<br />');
+          $task.append($a);
+          $task.append('<br />');
+          $task.append('<br />');
+          
+        }).fail(function(){
+          alert("fail!")
+        });
+    }
+    function pomodoro_edit(task_id){
+        $task = $('#task'+task_id);
+        $input = $('#task'+task_id+'>input');
+        $.post('/pomodoro_edit/'+task_id, {
+            task : $input.val()
+        }).done(function(response){
+          window.location.reload();
+        }).fail(function(){
+            $input.val('fail to add');
+        });
+    }
     </script>
   </head>
   <body>
@@ -93,6 +133,7 @@
           <h3 class="muted">Mentalbreakdown</h3>
         </div>
         <hr>
+          {% include 'flash.html' %}
           {% block content %}{% endblock %}
     </div>   
   </body>

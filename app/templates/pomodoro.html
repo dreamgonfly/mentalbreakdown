@@ -3,12 +3,17 @@
 {% block content %}
   <div class="jumbotron"> 
 {% if pick %}
-    <h1 id="task{{ pick.id }}">{{ pick.todo }}</h1>
-    <!-- <p><a href="javascript:edit">edit</a></p> -->
-    <p class="lead">Estimated time : {{ pick.estimated_time }}</p>
-    <p class="lead">priority : {{ pick.priority }}</p>    
+    <div id="task{{ pick.id }}">
+        <h1 onclick="pomodoro_edit_ready({{ pick.id }})">{{ pick.todo }}</h1>
+        <!-- <p><a href="javascript:edit">edit</a></p> -->
+        <p class="lead">Required time : {{ pick.required_time }}</p>
+        <p class="lead">priority : {{ pick.priority }}</p>
+    </div>
     <a class="btn btn-large btn-success" href="{{ url_for('complete', task_id=pick.id) }}">complete</a>
     <a class="btn btn-large" href="{{ url_for('notnow', task_id=pick.id) }}">Not Now</a>
+    <br />
+    <br />
+    <p><a href="{{ url_for('drop', task_id=pick.id) }}">drop</a></p>
 {% else %}
     <p class="lead">There is no task anymore</p>
 {% endif %}
