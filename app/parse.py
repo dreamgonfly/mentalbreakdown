@@ -4,15 +4,13 @@ import re
 
 def parse_todo(raw):
 	parsed = {}
-	time_format = '((\d+-)?\d+-\d+ \d+:\d+(:\d+)?|(\d+-)?\d+-\d+|\d+:\d+(:\d+)?|\d+h|\d+d|\d+m)'
-	matched = re.match(r'(.*?)( \(\d+\)| {0}~{0}| {0}~| ~{0})* ?$'.format(time_format), raw)
-	parsed['todo'] = matched.groups()[0]
-	required_time_raw = re.search(r' \((\d+)\)', raw)
-	if required_time_raw:
-		parsed['required_time'] = int(required_time_raw.groups()[0])
-	scheduled_raw = re.search(r' {}~'.format(time_format), raw)
-	if scheduled_raw:
-		scheduled_raw = scheduled_raw.groups()[0]
+	time_format = '(\d+-)?\d+-\d+ \d+:\d+(:\d+)?|(\d+-)?\d+-\d+|\d+:\d+(:\d+)?|\d+h|\d+d|\d+m'
+	matched = re.match(r'(?P<todo>.*?)( \((?P<required_time>\d+)\)| (?P<scheduled>{0})?~(?P<due>{0})?)* ?$'.format(time_format), raw)
+	parsed['todo'] = matched.group('todo')
+	if matched.group('required_time'):
+		parsed['required_time'] = int(matched.group('required_time'))
+	if matched.group('scheduled'):
+		scheduled_raw = matched.group('scheduled')
 		if scheduled_raw[-1] == 'd':
 			day = int(scheduled_raw[:-1])
 			scheduled = datetime.now() + timedelta(day)
@@ -25,12 +23,9 @@ def parse_todo(raw):
 			scheduled = datetime.now() + timedelta(minutes = minute)
 		else:
 			scheduled = parse(scheduled_raw)
-			if scheduled.hour == 0 and scheduled.minute == 0:
-				scheduled = scheduled + timedelta(1) - timedelta(minutes = 1)
 		parsed['scheduled'] = scheduled
-	due_raw = re.search(r' [^~]+~{}'.format(time_format), raw)
-	if due_raw:
-		due_raw = due_raw.groups()[0]
+	if matched.group('due'):
+		due_raw = matched.group('due')
 		if due_raw[-1] == 'd':
 			day = int(due_raw[:-1])
 			due = datetime.now() + timedelta(day)

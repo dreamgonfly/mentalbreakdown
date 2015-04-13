@@ -2,6 +2,7 @@ from app import db
 from datetime import datetime
 from .parse import parse_todo
 from .prioritize import pick_one
+from sqlalchemy.sql.expression import or_  
 
 class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -18,34 +19,49 @@ class Task(db.Model):
     
     def __init__(self, *args, **kwargs):
         db.Model.__init__(self, *args, **kwargs)
-        r = parse_todo(kwargs['raw'])
-        self.todo = r['todo']
-        if 'required_time' in r:
-            self.required_time = r['required_time']
+        parsed = parse_todo(kwargs['raw'])
+        self.todo = parsed['todo']
+        if 'required_time' in parsed:
+            self.required_time = parsed['required_time']
         else:
             self.required_time = 1
-        if 'due' in r:
-            self.due = r['due']
+        if 'scheduled' in parsed:
+            self.scheduled = parsed['scheduled']
+        if 'due' in parsed:
+            self.due = parsed['due']
         self.last_notnow = datetime.min
         self.timestamp = datetime.now()
+        self.raw = self.todo + (' (' + str(self.required_time) + ')' if 'required_time' in parsed else '') + \
+            (' ' if 'scheduled' in parsed or 'due' in parsed else '') + \
+            (str(self.scheduled) if 'scheduled' in parsed else '') + \
+            ('~' if 'scheduled' in parsed or 'due' in parsed else '') + \
+            (str(self.due) if 'due' in parsed else '')
+
 
     def edit(self, raw):
-        self.raw = raw
-        r = parse_todo(raw)
-        self.todo = r['todo']
-        if 'required_time' in r:
-            self.required_time = r['required_time']
+        parsed = parse_todo(raw)
+        self.todo = parsed['todo']
+        if 'required_time' in parsed:
+            self.required_time = parsed['required_time']
         else:
             self.required_time = 1
-        if 'due' in r:
-            self.due = r['due']
+        if 'scheduled' in parsed:
+            self.scheduled = parsed['scheduled']
+        if 'due' in parsed:
+            self.due = parsed['due']
+        self.raw = self.todo + (' (' + str(self.required_time) + ')' if 'required_time' in parsed else '') + \
+            (' ' if 'scheduled' in parsed or 'due' in parsed else '') + \
+            (str(self.scheduled) if 'scheduled' in parsed else '') + \
+            ('~' if 'scheduled' in parsed or 'due' in parsed else '') + \
+            (str(self.due) if 'due' in parsed else '')
+
 
     def __repr__(self):
         return '<Task {}>'.format(self.raw)
 
     @staticmethod
     def active_tasks():
-    	return Task.query.filter_by(completed_time = None).filter_by(dropped_time = None)
+        return Task.query.filter_by(completed_time = None).filter_by(dropped_time = None).filter(or_(Task.scheduled == None, Task.scheduled < datetime.now()))
 
     @staticmethod
     def pick_one():

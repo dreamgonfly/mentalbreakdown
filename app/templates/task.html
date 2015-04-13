@@ -3,7 +3,18 @@
         <td style="width:200px;"><a href="{{ url_for('complete', task_id=task.id) }}">complete</a></td>
         <td class="task" id="{{ task.id }}">
             <p onclick="edit_ready({{ task.id }})"><strong>{{ task.todo }}</strong></p>
-            <p>{{ task.required_time }} pomodoro</p>
+            <p>
+            	{{ task.required_time }} pomodoro 
+            	{% if task.scheduled %}
+            		{{ task.scheduled }}
+            	{% endif %}
+            	{% if task.scheduled or task.due %}
+            		~
+            	{% endif %}
+            	{% if task.due %}
+            		{{ task.due }}
+            	{% endif %}
+	        </p>
         </td>
         <td><span class="pull-right"><a href="{{ url_for('drop', task_id=task.id) }}">drop</a></span></td>
     </tr>

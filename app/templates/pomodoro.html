@@ -6,7 +6,18 @@
     <div id="task{{ pick.id }}">
         <h1 onclick="pomodoro_edit_ready({{ pick.id }})">{{ pick.todo }}</h1>
         <!-- <p><a href="javascript:edit">edit</a></p> -->
-        <p class="lead">{{ pick.required_time }} pomodoro</p>
+        <p class="lead">
+            {{ pick.required_time }} pomodoro 
+            {% if pick.scheduled %}
+                {{ pick.scheduled }}
+            {% endif %}
+            {% if pick.scheduled or pick.due %}
+                ~
+            {% endif %}
+            {% if pick.due %}
+                {{ pick.due }}
+            {% endif %}
+        </p>
         <p class="lead">priority : {{ pick.priority }}</p>
     </div>
     <a class="btn btn-large btn-success" href="{{ url_for('complete', task_id=pick.id) }}">complete</a>
