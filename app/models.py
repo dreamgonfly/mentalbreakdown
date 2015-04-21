@@ -47,8 +47,12 @@ class Task(db.Model):
             self.required_time = 1
         if 'scheduled' in parsed:
             self.scheduled = parsed['scheduled']
+        else:
+            self.scheduled = None
         if 'due' in parsed:
             self.due = parsed['due']
+        else:
+            self.due = None
         self.raw = self.todo + (' (' + str(self.required_time) + ')' if 'required_time' in parsed else '') + \
             (' ' if 'scheduled' in parsed or 'due' in parsed else '') + \
             (str(self.scheduled) if 'scheduled' in parsed else '') + \
