@@ -3,6 +3,63 @@
 {% block content %}
   <div class="jumbotron"> 
 {% if pick %}
+  <div class="starter-template">
+    <h1>Bootstrap starter template</h1>
+    <p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>
+    <div class="panel panel-default" data-toggle="tooltip" data-placement="top" title="Beautifull, insn't it?">
+      <div class="panel-body">
+        <div class="lead" id="clock"></div>
+      </div>
+    </div>
+
+    <button type="button" class="btn btn-primary" id="btn-reset">
+      <i class="glyphicon glyphicon-repeat"></i>
+      Reset countdown
+    </button>
+
+    <div class="btn-group" data-toggle="buttons">
+      <label class="btn btn-default" id="btn-pause">
+        <input type="radio" name="options" id="option2" autocomplete="off">
+        <i class="glyphicon glyphicon-pause"></i>
+        Pause
+      </label>
+
+      <label class="btn btn-default active" id="btn-resume">
+        <input type="radio" name="options" id="option2" autocomplete="off" checked>
+        <i class="glyphicon glyphicon-play"></i>
+        Resume
+      </label>
+    </div>
+  </div>
+<script type="text/javascript">
+  // Turn on Bootstrap
+  $('[data-toggle="tooltip"]').tooltip();
+
+  // 15 days from now!
+  function get25minFromNow() {
+    return new Date(new Date().valueOf() + 25 * 60 * 1000);
+  }
+
+  var $clock = $('#clock');
+
+  $clock.countdown(get25minFromNow(), function(event) {
+    $(this).html(event.strftime('%M:%S'));
+  });
+
+  $('#btn-reset').click(function() {
+    $clock.countdown(get25minFromNow());
+  });
+
+  $('#btn-pause').click(function() {
+    $clock.countdown('pause');
+  });
+
+  $('#btn-resume').click(function() {
+    $clock.countdown('resume');
+  });
+
+</script>
+
     <div id="task{{ pick.id }}">
         <h1 onclick="pomodoro_edit_ready({{ pick.id }})">{{ pick.todo }}</h1>
         <!-- <p><a href="javascript:edit">edit</a></p> -->

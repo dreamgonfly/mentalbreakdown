@@ -49,6 +49,8 @@ class Task(db.Model):
             self.scheduled = parsed['scheduled']
         if 'due' in parsed:
             self.due = parsed['due']
+        else:
+            self.due = None
         self.raw = self.todo + (' (' + str(self.required_time) + ')' if 'required_time' in parsed else '') + \
             (' ' if 'scheduled' in parsed or 'due' in parsed else '') + \
             (str(self.scheduled) if 'scheduled' in parsed else '') + \
@@ -66,3 +68,15 @@ class Task(db.Model):
     @staticmethod
     def pick_one():
     	return pick_one(Task.active_tasks().all())
+
+# class Pomodoro(db.Model):
+#     """docstring for Pomodoro"""
+#     id = db.Column(db.Integer, primary_key = True)
+#     start_time = db.Column(db.DateTime)
+#     end_time = db.Column(db.DateTime)
+    # pomodoro = db.Column(db.Float)
+
+#     def __init__(self, arg):
+#         super(Pomodoro, self).__init__()
+#         self.arg = arg
+#     def 
