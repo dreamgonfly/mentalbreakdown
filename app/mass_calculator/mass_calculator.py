@@ -3,7 +3,7 @@ from app import app, db
 import csv
 from os import path
 
-PERIODIC_TABLE = path.join(os.path.dirname(__file__),'periodic_table.csv')
+PERIODIC_TABLE = path.join(path.dirname(__file__),'periodic_table.csv')
 
 @app.route('/mass_calculator')
 def mass_calculator():
@@ -15,7 +15,7 @@ def calculate_mass():
 	data = request.get_json(force=True)
 
 	def molar_mass(element):
-		with open(PERIODIC_TABLE) as table:
+		with open( PERIODIC_TABLE ) as table:
 		    for row in csv.reader(table):
 		        if row[1] == ' ' + element + ' ':
 		        	return float(row[3].strip().split('(')[0])
