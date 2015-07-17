@@ -70,3 +70,15 @@ class Task(db.Model):
     @staticmethod
     def pick_one():
     	return pick_one(Task.active_tasks().all())
+
+# class Pomodoro(db.Model):
+#     """docstring for Pomodoro"""
+#     id = db.Column(db.Integer, primary_key = True)
+#     start_time = db.Column(db.DateTime)
+#     end_time = db.Column(db.DateTime)
+    # pomodoro = db.Column(db.Float)
+
+#     def __init__(self, arg):
+#         super(Pomodoro, self).__init__()
+#         self.arg = arg
+#     def 

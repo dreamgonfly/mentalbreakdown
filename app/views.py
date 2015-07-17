@@ -109,6 +109,11 @@ def drop(task_id):
     db.session.commit()
     return redirect(url_for('pomodoro'))
 
+@app.route('/pomodoro_done/<int:task_id>', methods = ['POST'])
+def pomodoro_done(task_id):
+    task = Task.query.get(task_id)
+    # request.
+
 @app.errorhandler(404)
 def not_found_error(error):
     return render_template('404.html'), 404
