@@ -9,3 +9,5 @@ backup
 
 *.sublime-project
 *.sublime-workspace
+
+*.log

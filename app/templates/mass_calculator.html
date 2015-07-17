@@ -71,6 +71,7 @@
                 success: function(result){
                     $('#result').show()
                     var rows = $('#rows')
+                    rows.empty()
 
                     $.each(result, function(i, val){
                         row = '<tr>' + 
