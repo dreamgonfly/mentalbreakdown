@@ -6,7 +6,7 @@ import json
 from datetime import datetime
 from config import LAMBDA, REFRESH_TIME
 
-@app.route('/', methods=['GET', 'POST'])
+# @app.route('/', methods=['GET', 'POST'])
 @app.route('/list', methods=['GET', 'POST'])
 def list():
     form = TaskForm()
